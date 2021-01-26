@@ -72,12 +72,21 @@ img {
     margin-bottom: 35px;
 }
 
-.form-search h3 {
+.form-search h3,
+.mg3 {
     margin-bottom: 30px;
 }
 
 .form-group {
     margin-bottom: 2rem;
+}
+
+.data .bold {
+    font-weight: bold;
+}
+
+.data .button {
+    text-align: center;
 }
 
 
