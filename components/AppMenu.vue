@@ -2,16 +2,16 @@
 <div class="menu">
     <ul>
         <li>
-            <a title="" href="">List</a>    
+            <a title="" href="/">List</a>    
         </li>
         <li>
-            <a title="" href="">New</a>    
+            <a title="" href="/create">New</a>    
         </li>
         <li>
-            <a title="" href="">Search</a>    
+            <a title="" href="/search">Search</a>    
         </li>
         <li>
-            <a title="" href="">Edit</a>    
+            <a title="" href="/edit">Edit</a>    
         </li>
     </ul>
 </div>

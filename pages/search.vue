@@ -8,19 +8,19 @@
                 <div class="col-lg-9">
                     <div class="form-search">
                         <h3>Search Blogs</h3>
-                        <form method="get" action="">
+                        
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">
                                     Tiêu đề
                                 </label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" placeholder="Tìm kiếm..">
+                                    <input class="form-control" placeholder="Tìm kiếm.." v-model="search">
                                 </div>
                             </div>
-                            <button class="btn btn-success">Search</button>
-                        </form>
+                            <button class="btn btn-success" @click="searchData">Search</button>
+                        
                     </div>
-                    <blog-list></blog-list>
+                    <blog-list ref="list"></blog-list>
                 </div>
             </div>
         </div>
@@ -30,6 +30,16 @@
 import AppMenu from '@/components/AppMenu'
 import BlogList from '@/components/BlogList'
 export default {
-    layout: "search"
+    layout: "search",
+    data() {
+        return {
+            search: ''
+        }
+    },
+    methods:{
+        searchData(){
+           this.$refs.list.search(this.search)
+        }
+    }
 }
 </script>

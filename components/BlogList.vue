@@ -7,95 +7,72 @@
                     <th>ID</th>
                     <th>Tin</th>
                     <th>Loại</th>
-                    <th>Trạng thái</th>
+                    <th>Trạng thái</th> 
                     <th>Vị trí</th>
                     <th>Ngày Public</th>
                     <th>Edit</th>
-                    <th>Delete</th>           
+                    <th>Delete</th>     
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Phà Vàm Cống dừng hoạt động từ ngày 30/6</td>
-                    <td>Thời sự</td>
-                    <td>No</td>
-                    <td>Việt Nam</td>
-                    <td>2019-06-28</td>
-                    <td>Edit</td>
-                    <td><button type="button" class="btn btn-danger">Delete</button></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Hai dự án Bắc Nam sẽ khởi công vào tháng 8</td>
-                    <td>Thời sự</td>
-                    <td>Yes</td>
-                    <td>Việt Nam</td>
-                    <td>2019-06-28</td>
-                    <td>Edit</td>
-                    <td><button type="button" class="btn btn-danger">Delete</button></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Nắng nóng như "đầu lâu tử thần" trên bản đồ nhiệt Châu Âu</td>
-                    <td>Thế giới</td>
-                    <td>No</td>
-                    <td>Châu Á</td>
-                    <td>2019-06-28</td>
-                    <td>Edit</td>
-                    <td><button type="button" class="btn btn-danger">Delete</button></td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Trump lại dọa "xóa sổ" IRan bằng lực lượng áp đảo</td>
-                    <td>Thế giới</td>
-                    <td>Yes</td>
-                    <td>Việt Nam</td>
-                    <td>2019-06-28</td>
-                    <td>Edit</td>
-                    <td><button type="button" class="btn btn-danger">Delete</button></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>Giá Bitcoin mất hơn 3000 USD một ngày</td>
-                    <td>Kinh doanh</td>
-                    <td>Yes</td>
-                    <td>Việt Nam</td>
-                    <td>2019-06-28</td>
-                    <td>Edit</td>
-                    <td><button type="button" class="btn btn-danger">Delete</button></td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>Giá vàng thế giới lên đỉnh 6 năm vì Mỹ, Iran</td>
-                    <td>Kinh doanh</td>
-                    <td>No</td>
-                    <td>Châu Á</td>
-                    <td>2019-06-28</td>
-                    <td>Edit</td>
-                    <td><button type="button" class="btn btn-danger">Delete</button></td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>Song Hye Kyo "ngọc nữ" giàu có, đa tình</td>
-                    <td>Giải trí</td>
-                    <td>Yes</td>
-                    <td>Việt Nam</td>
-                    <td>2019-06-28</td>
-                    <td>Edit</td>
-                    <td><button type="button" class="btn btn-danger">Delete</button></td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>Phà Vàm Cống dừng hoạt động từ ngày 30/6</td>
-                    <td>Thời sự</td>
-                    <td>No</td>
-                    <td>Việt Nam</td>
-                    <td>2019-06-28</td>
-                    <td>Edit</td>
-                    <td><button type="button" class="btn btn-danger">Delete</button></td>
+            <tbody v-if="blogs && blogs.length">
+                <tr v-for="blog of blogs">
+                    <td>{{blog.id}}</td>
+                    <td>{{blog.title}}</td>
+                    <td v-if="blog.category == 0">Xã hội</td>
+                    <td v-else-if="blog.category == 1">Thế giới</td>
+                    <td v-else-if="blog.category == 2">Kinh tế</td>
+                    <td v-else-if="blog.category == 3">Giải trí</td>
+                    <td v-else-if="blog.category == 4">Bóng đá</td>
+                    <td v-else-if="blog.category == 5">Chính trị</td>
+                    <td v-else>Đời sống</td>
+                    <td v-if="blog.public == true">Yes</td>
+                    <td v-if="blog.public == false">No</td>
+                    <td>
+                        <ul>
+                            <div v-for="position of blog.position" >
+                                <li v-if="position == 1"> Hà Nội</li>
+                                <li v-if="position == 2"> Châu Âu</li>
+                                <li v-if="position == 3"> Châu Á</li>
+                                <li v-if="position == 4"> Châu Mỹ</li>
+                            </div>
+                        </ul>
+                    </td>
+                    <td>{{blog.data_pubblic}}</td>
+                    <td><a href="/edit" title="">Edit</dit></a></td>
+                    <td><button type="button" class="btn btn-danger" @click="doDelete(id)">Delete</button></td>
                 </tr>
             </tbody>
         </table>
     </div>
 </template>
+
+<script>
+import axios from "axios"
+export default {
+    data: () => ({
+        blogs: [],
+        error: []
+    }),
+
+    created(){
+        this.listData()
+    },
+    methods:{
+        doDelete(id){
+            this.blogs.splice(id,1)
+        },
+        listData(search=''){
+            const url = search != '' ? 'http://localhost:4000/blogs?title_like=' + search : 'http://localhost:4000/blogs'
+            axios.get(url).then(response => {
+                this.blogs = response.data
+            }).catch(e => { 
+                this.errors.push(e)
+            })
+        },
+        
+        search(search){
+            this.listData(search)
+        }
+    }
+}
+</script>
