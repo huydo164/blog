@@ -7,7 +7,7 @@
             <app-menu></app-menu>
           </div>
           <div class="col-lg-9">
-            <h3 class="mg3">New Blogs</h3>
+            <h3 class="mg3">Edit Blogs</h3>
             <blog-create-edit></blog-create-edit>
           </div>
         </div>
@@ -19,6 +19,7 @@
 <script>
 import AppMenu from '@/components/AppMenu'
 import BlogCreateEdit from '@/components/BlogCreateEdit'
+import axios from 'axios'
 
 export default {
   components: { BlogCreateEdit }

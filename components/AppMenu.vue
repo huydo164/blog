@@ -1,18 +1,30 @@
 <template>
-<div class="menu">
+  <div class="menu">
     <ul>
-        <li>
-            <a title="" href="/">List</a>    
-        </li>
-        <li>
-            <a title="" href="/create">New</a>    
-        </li>
-        <li>
-            <a title="" href="/search">Search</a>    
-        </li>
-        <li>
-            <a title="" href="/edit">Edit</a>    
-        </li>
+      <li>
+        <a
+          title=""
+          href="/"
+        >List</a>
+      </li>
+      <li>
+        <a
+          title=""
+          href="/create"
+        >New</a>
+      </li>
+      <li>
+        <a
+          title=""
+          href="/search"
+        >Search</a>
+      </li>
+      <li>
+        <a
+          title=""
+          href="/edit"
+        >Edit</a>
+      </li>
     </ul>
-</div>
+  </div>
 </template>
