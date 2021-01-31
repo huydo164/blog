@@ -52,7 +52,27 @@
           v-bind:key="post"
           class="list-group-control"
         >
-          <div class="custom-control custom-checkbox">
+          <div
+            :v-if="blogs.position == post"
+            class="custom-control custom-checkbox"
+          >
+            <input
+              checked
+              type="checkbox"
+              :value="key"
+              class="custom-control-input"
+              :id="'check' + key"
+              v-model="blogs.position"
+            >
+            <label
+              class="custom-control-label"
+              :for=" 'check' + key "
+            >{{ post }}</label>
+          </div>
+          <div
+            v-else:
+            class="custom-control custom-checkbox"
+          >
             <input
               type="checkbox"
               :value="key"
