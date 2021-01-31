@@ -4,25 +4,25 @@
       <li>
         <a
           title=""
-          href="/"
+          href="/blogs"
         >List</a>
       </li>
       <li>
         <a
           title=""
-          href="/create"
+          href="/blogs/create"
         >New</a>
       </li>
       <li>
         <a
           title=""
-          href="/search"
+          href="/blogs/search"
         >Search</a>
       </li>
       <li>
         <a
           title=""
-          href="/edit"
+          href="/blogs/edit"
         >Edit</a>
       </li>
     </ul>

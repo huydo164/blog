@@ -51,7 +51,7 @@ export default {
 
   methods: {
     searchData: function (search = "") {
-      const url = search ? 'http://localhost:4000/blogs?title_like=' + search : 'http://localhost:4000/blogs';
+      const url = search ? 'http://127.0.0.1:8000/api/blogs?title_like=' + search : 'http://127.0.0.1:8000/api/blogs';
       axios.get(url).then((response) => {
         this.blogs = response.data
       })

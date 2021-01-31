@@ -38,33 +38,32 @@
         v-model="blogs.category"
       >
         <option
-          v-for="(cate,index) in data_cate"
+          v-for="(cate,index) in dataCate "
           v-bind:key="cate"
           :value="index"
         >{{cate}}</option>
       </select>
     </div>
     <div class="form-group">
-      <label class=" bold">Vị trí</label>
+      <p>Vị trí</p>
       <ul class="list-group list-group-flush">
         <li
-          v-for="(pos, index) in data_pos"
-          v-bind:key="pos"
+          v-for="(post,key) in dataPos"
+          v-bind:key="post"
           class="list-group-control"
         >
           <div class="custom-control custom-checkbox">
             <input
               type="checkbox"
+              :value="key"
               class="custom-control-input"
-              :id="index + 'custom'"
-              :value="index"
-              name="vietnam"
+              :id="'check' + key"
               v-model="blogs.position"
             >
             <label
               class="custom-control-label"
-              :for="index + 'custom'"
-            >{{ pos }}</label>
+              :for=" 'check' + key "
+            >{{ post }}</label>
           </div>
         </li>
       </ul>
@@ -75,7 +74,7 @@
         type="radio"
         id="checkbox1"
         :name="yes"
-        :value="true"
+        v-bind:value=1
         v-model="blogs.public"
       >
       <label for="checkbox1">Yes</label><br>
@@ -83,7 +82,7 @@
         type="radio"
         id="checkbox2"
         :name="no"
-        :value="false"
+        v-bind:value=2
         v-model="blogs.public"
       >
       <label for="checkbox2">No</label><br>
@@ -123,11 +122,13 @@
 
 <script>
 import axios from "axios"
+import { DATA_CATE } from '@/constants/constants.js'
+import { DATA_POS } from '@/constants/constants.js'
 export default {
   data() {
     return {
-      data_cate: ['thế giới', 'kinh tế', 'giải trí', 'bóng đá', 'chính trị'],
-      data_pos: ['Việt Nam', 'Châu Âu', 'Châu Á', 'Châu Mỹ'],
+      DATA_CATE: DATA_CATE,
+      DATA_POS: DATA_POS,
       blogs: {
         id: '',
         title: '',
@@ -142,11 +143,22 @@ export default {
       errors: []
     }
   },
+
   created() {
     if (this.$route.name != 'create') {
       this.listData()
     }
   },
+
+  computed: {
+    dataCate: function () {
+      return this.DATA_CATE
+    },
+    dataPos: function () {
+      return this.DATA_POS
+    }
+  },
+
   methods: {
     addData() {
       this.errors = []
@@ -168,22 +180,54 @@ export default {
       if (this.blogs.data_pubblic == '') {
         this.errors.push('data_pubblic không được trống')
       }
+      if (this.blogs.position == []) {
+        this.errors.push('position không được trống!')
+      }
       if (this.errors.length > 0) {
         return false
       }
       else {
-        axios.post('http://localhost:4000/blogs', this.blogs).then(function (response) { });
+        axios.post('http://127.0.0.1:8000/api/blogs', this.blogs).then(function (response) { });
+        this.$router.push({ path: '/blogs' })
       }
     },
 
     listData() {
-      axios.get('http://localhost:4000/blogs/' + this.$route.params.id).then((response) => {
+      axios.get('http://127.0.0.1:8000/api/blogs/' + this.$route.params.id).then((response) => {
         this.blogs = response.data
       })
     },
 
     updateData() {
-      axios.put('http://localhost:4000/blogs/' + this.$route.params.id, this.blogs).then(function (response) { })
+      this.errors = []
+      if (this.blogs.title == '') {
+        this.errors.push('title không được trống')
+      }
+      if (this.blogs.des == '') {
+        this.errors.push('des không được trống')
+      }
+      if (this.blogs.detail == '') {
+        this.errors.push('deatil không được trống')
+      }
+      if (this.blogs.category == '') {
+        this.errors.push('category không được trống')
+      }
+      if (this.blogs.public == '') {
+        this.errors.push('public không được trống')
+      }
+      if (this.blogs.data_pubblic == '') {
+        this.errors.push('data_pubblic không được trống')
+      }
+      if (this.blogs.position == []) {
+        this.errors.push('position không được trống!')
+      }
+      if (this.errors.length > 0) {
+        return false
+      }
+      else {
+        axios.put('http://127.0.0.1:8000/api/blogs/' + this.$route.params.id, this.blogs).then(function (response) { });
+        this.$router.push({ path: '/blogs' })
+      }
     }
   }
 }

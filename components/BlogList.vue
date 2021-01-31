@@ -21,31 +21,35 @@
         >
           <td>{{blog.id}}</td>
           <td>{{blog.title}}</td>
-          <td v-if="blog.category == 0">Xã hội</td>
-          <td v-else-if="blog.category == 1">Thế giới</td>
-          <td v-else-if="blog.category == 2">Kinh tế</td>
-          <td v-else-if="blog.category == 3">Giải trí</td>
-          <td v-else-if="blog.category == 4">Bóng đá</td>
-          <td v-else-if="blog.category == 5">Chính trị</td>
-          <td v-else>Đời sống</td>
-          <td v-if="blog.public == true">Yes</td>
-          <td v-if="blog.public == false">No</td>
+          <td>
+            <div
+              v-for="(cate, key) in dataCate"
+              :key="key"
+            >
+              <p v-if="key == blog.category">{{cate}}</p>
+
+            </div>
+          </td>
+          <td v-if="blog.public == 1 ">Yes</td>
+          <td v-if="blog.public == 2 ">No</td>
           <td>
             <ul>
               <div
-                v-for="position of blog.position"
-                v-bind:key="position"
+                v-for="(posit) of blog.position"
+                v-bind:key="posit"
               >
-                <li v-if="position == 1"> Hà Nội</li>
-                <li v-if="position == 2"> Châu Âu</li>
-                <li v-if="position == 3"> Châu Á</li>
-                <li v-if="position == 4"> Châu Mỹ</li>
+                <li
+                  v-for="(pos, key ,index) in dataPos"
+                  :key="index"
+                >
+                  <p v-if="key == posit">{{pos}}</p>
+                </li>
               </div>
             </ul>
           </td>
           <td>{{blog.data_pubblic}}</td>
           <td><a
-              v-bind:href="/edit/ + blog.id"
+              v-bind:href=" '/blogs/' +blog.id"
               title=""
             >Edit</a></td>
           <td><button
@@ -61,12 +65,31 @@
 
 <script>
 import axios from "axios"
+import { DATA_CATE } from '@/constants/constants.js'
+import { DATA_POS } from '@/constants/constants.js'
 export default {
   props: ['blogs'],
 
+  data() {
+    return {
+      DATA_CATE: DATA_CATE,
+      DATA_POS: DATA_POS,
+    }
+  },
+
+  computed: {
+    dataCate: function () {
+      return this.DATA_CATE
+    },
+
+    dataPos: function () {
+      return this.DATA_POS
+    }
+  },
+
   methods: {
     doDelete(id, index) {
-      axios.delete('http://localhost:4000/blogs/' + id).then((response) => {
+      axios.delete('http://127.0.0.1:8000/api/blogs/' + id).then((response) => {
         this.blogs.splice(index, 1)
       })
     },
