@@ -33,19 +33,7 @@
           <td v-if="blog.public == 1 ">Yes</td>
           <td v-if="blog.public == 2 ">No</td>
           <td>
-            <ul>
-              <div
-                v-for="(posit) of blog.position"
-                v-bind:key="posit"
-              >
-                <li
-                  v-for="(pos, key ,index) in dataPos"
-                  :key="index"
-                >
-                  <p v-if="key == posit">{{pos}}</p>
-                </li>
-              </div>
-            </ul>
+            <p>{{parseJSONIfJSON(blog.position)}}</p>
           </td>
           <td>{{blog.data_pubblic}}</td>
           <td><a
@@ -76,7 +64,6 @@ export default {
       DATA_POS: DATA_POS,
     }
   },
-
   computed: {
     dataCate: function () {
       return this.DATA_CATE
@@ -93,6 +80,14 @@ export default {
         this.blogs.splice(index, 1)
       })
     },
+    parseJSONIfJSON(posit) {
+      try {
+        const posArr = JSON.parse(posit)
+        return posArr.join(', ')
+      } catch (error) {
+        return ""
+      }
+    }
   }
 }
 </script>

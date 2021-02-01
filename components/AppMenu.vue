@@ -2,28 +2,16 @@
   <div class="menu">
     <ul>
       <li>
-        <a
-          title=""
-          href="/blogs"
-        >List</a>
+        <NuxtLink to="/blogs">List</NuxtLink>
       </li>
       <li>
-        <a
-          title=""
-          href="/blogs/create"
-        >New</a>
+        <NuxtLink to="/blogs/create">Create</NuxtLink>
       </li>
       <li>
-        <a
-          title=""
-          href="/blogs/search"
-        >Search</a>
+        <NuxtLink to="/blogs/search">Search</NuxtLink>
       </li>
       <li>
-        <a
-          title=""
-          href="/blogs/edit"
-        >Edit</a>
+        <NuxtLink to="/blogs/edit">Edit</NuxtLink>
       </li>
     </ul>
   </div>

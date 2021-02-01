@@ -5,7 +5,7 @@
       <input
         type="text"
         class="form-control"
-        v-model="blogs.title"
+        v-model="blog.title"
       >
     </div>
     <div class="form-group">
@@ -13,7 +13,7 @@
       <input
         type="text"
         class="form-control"
-        v-model="blogs.des"
+        v-model="blog.des"
       >
     </div>
     <div class="form-group">
@@ -21,7 +21,7 @@
       <textarea
         class="form-control"
         rows="3"
-        v-model="blogs.detail"
+        v-model="blog.detail"
       ></textarea>
     </div>
     <div class="form-group">
@@ -35,11 +35,11 @@
       <label class="col-lg-12 bold">Loại</label>
       <select
         class="form-control custom-select col-lg-2"
-        v-model="blogs.category"
+        v-model="blog.category"
       >
         <option
-          v-for="(cate,index) in dataCate "
-          v-bind:key="cate"
+          v-for="(cate,index) in dataCate"
+          :key="cate"
           :value="index"
         >{{cate}}</option>
       </select>
@@ -49,40 +49,20 @@
       <ul class="list-group list-group-flush">
         <li
           v-for="(post,key) in dataPos"
-          v-bind:key="post"
+          :key="post"
           class="list-group-control"
         >
-          <div
-            :v-if="blogs.position == post"
-            class="custom-control custom-checkbox"
-          >
+          <div class="custom-control custom-checkbox">
             <input
-              checked
               type="checkbox"
-              :value="key"
+              :value="post"
               class="custom-control-input"
-              :id="'check' + key"
-              v-model="blogs.position"
+              :id="'check' + key + 1"
+              v-model="blog.position"
             >
             <label
               class="custom-control-label"
-              :for=" 'check' + key "
-            >{{ post }}</label>
-          </div>
-          <div
-            v-else:
-            class="custom-control custom-checkbox"
-          >
-            <input
-              type="checkbox"
-              :value="key"
-              class="custom-control-input"
-              :id="'check' + key"
-              v-model="blogs.position"
-            >
-            <label
-              class="custom-control-label"
-              :for=" 'check' + key "
+              :for=" 'check' + key + 1 "
             >{{ post }}</label>
           </div>
         </li>
@@ -93,17 +73,17 @@
       <input
         type="radio"
         id="checkbox1"
-        :name="yes"
-        v-bind:value=1
-        v-model="blogs.public"
+        name="public"
+        :value=1
+        v-model="blog.public"
       >
       <label for="checkbox1">Yes</label><br>
       <input
         type="radio"
         id="checkbox2"
-        :name="no"
-        v-bind:value=2
-        v-model="blogs.public"
+        name="public"
+        :value=2
+        v-model="blog.public"
       >
       <label for="checkbox2">No</label><br>
     </div>
@@ -112,20 +92,20 @@
       <input
         type="date"
         class="form-control col-lg-3"
-        v-model="blogs.data_pubblic"
+        v-model="blog.data_pubblic"
       >
     </div>
     <div class="button">
       <button
-        v-if="this.$route.name == 'create'"
+        v-if="this.$route.name == 'blogs-create'"
         v-on:click="addData()"
         class="btn btn-success"
-      >Submit</button>
+      >Add</button>
       <button
         v-else
         v-on:click="updateData()"
         class="btn btn-success"
-      >Submit</button>
+      >Update</button>
       <button class="btn btn-primary">Clear</button>
     </div>
     <ul
@@ -134,7 +114,7 @@
     >
       <li
         v-for="error in errors"
-        v-bind:key="error"
+        :key="error"
       >{{error}}</li>
     </ul>
   </div>
@@ -149,7 +129,7 @@ export default {
     return {
       DATA_CATE: DATA_CATE,
       DATA_POS: DATA_POS,
-      blogs: {
+      blog: {
         id: '',
         title: '',
         des: '',
@@ -160,12 +140,12 @@ export default {
         position: [],
         thumbs: '',
       },
-      errors: []
+      errors: [],
     }
   },
 
-  created() {
-    if (this.$route.name != 'create') {
+  mounted() {
+    if (this.$route.name != 'blogs-create') {
       this.listData()
     }
   },
@@ -182,71 +162,81 @@ export default {
   methods: {
     addData() {
       this.errors = []
-      if (this.blogs.title == '') {
+      if (this.blog.title == '') {
         this.errors.push('title không được trống')
       }
-      if (this.blogs.des == '') {
+      if (this.blog.des == '') {
         this.errors.push('des không được trống')
       }
-      if (this.blogs.detail == '') {
+      if (this.blog.detail == '') {
         this.errors.push('deatil không được trống')
       }
-      if (this.blogs.category == '') {
+      if (this.blog.category == '') {
         this.errors.push('category không được trống')
       }
-      if (this.blogs.public == '') {
+      if (this.blog.public == '') {
         this.errors.push('public không được trống')
       }
-      if (this.blogs.data_pubblic == '') {
+      if (this.blog.data_pubblic == '') {
         this.errors.push('data_pubblic không được trống')
       }
-      if (this.blogs.position == []) {
+      if (this.blog.position == []) {
         this.errors.push('position không được trống!')
       }
       if (this.errors.length > 0) {
         return false
       }
       else {
-        axios.post('http://127.0.0.1:8000/api/blogs', this.blogs).then(function (response) { });
+        this.blog.position = JSON.stringify(this.blog.position)
+        axios.post('http://127.0.0.1:8000/api/blogs', this.blog).then(function (response) { });
         this.$router.push({ path: '/blogs' })
       }
     },
 
     listData() {
       axios.get('http://127.0.0.1:8000/api/blogs/' + this.$route.params.id).then((response) => {
-        this.blogs = response.data
+        const blog = response.data
+        blog.position = JSON.parse(blog.position)
+        this.blog = blog
       })
     },
 
     updateData() {
       this.errors = []
-      if (this.blogs.title == '') {
+      if (this.blog.title == '') {
         this.errors.push('title không được trống')
       }
-      if (this.blogs.des == '') {
+      if (this.blog.des == '') {
         this.errors.push('des không được trống')
       }
-      if (this.blogs.detail == '') {
+      if (this.blog.detail == '') {
         this.errors.push('deatil không được trống')
       }
-      if (this.blogs.category == '') {
+      if (this.blog.category == '') {
         this.errors.push('category không được trống')
       }
-      if (this.blogs.public == '') {
+      if (this.blog.public == '') {
         this.errors.push('public không được trống')
       }
-      if (this.blogs.data_pubblic == '') {
+      if (this.blog.data_pubblic == '') {
         this.errors.push('data_pubblic không được trống')
       }
-      if (this.blogs.position == []) {
+      if (this.blog.position == []) {
         this.errors.push('position không được trống!')
       }
       if (this.errors.length > 0) {
         return false
       }
       else {
-        axios.put('http://127.0.0.1:8000/api/blogs/' + this.$route.params.id, this.blogs).then(function (response) { });
-        this.$router.push({ path: '/blogs' })
+        this.blog.position = JSON.stringify(this.blog.position)
+        axios.put('http://127.0.0.1:8000/api/blogs/' + this.$route.params.id, this.blog)
+          .then(function (response) {
+          }.bind(this)).then(
+            () => {
+              this.$router.push({ path: '/blogs' })
+
+            }
+          );
       }
     }
   }
