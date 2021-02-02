@@ -38,7 +38,7 @@
         v-model="blog.category"
       >
         <option
-          v-for="(cate,index) in dataCate"
+          v-for="(cate,index) in CATEGORY_LIST"
           :key="cate"
           :value="index"
         >{{cate}}</option>
@@ -48,7 +48,7 @@
       <p>Vị trí</p>
       <ul class="list-group list-group-flush">
         <li
-          v-for="(post,key) in dataPos"
+          v-for="(post,key) in POSITION_LIST"
           :key="post"
           class="list-group-control"
         >
@@ -108,29 +108,29 @@
       >Update</button>
       <button class="btn btn-primary">Clear</button>
     </div>
-    <ul
-      v-if="errors.length"
-      class="alert alert-warning"
-    >
+    <div v-if="errors && errors.length ">
       <li
         v-for="error in errors"
         :key="error"
-      >{{error}}</li>
-    </ul>
+      >
+        <p class="alert alert-warning">{{ error }}</p>
+      </li>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios"
-import { DATA_CATE } from '@/constants/constants.js'
-import { DATA_POS } from '@/constants/constants.js'
+import { CATEGORY_LIST } from '@/mockdata/mock'
+import { POSITION_LIST } from '@/mockdata/mock'
 export default {
+  props: {
+  },
   data() {
     return {
-      DATA_CATE: DATA_CATE,
-      DATA_POS: DATA_POS,
+      CATEGORY_LIST,
+      POSITION_LIST,
       blog: {
-        id: '',
         title: '',
         des: '',
         detail: '',
@@ -138,58 +138,33 @@ export default {
         public: '',
         data_pubblic: '',
         position: [],
-        thumbs: '',
       },
       errors: [],
     }
   },
 
   mounted() {
-    if (this.$route.name != 'blogs-create') {
+    if (this.$route.name !== 'blogs-create') {
       this.listData()
-    }
-  },
-
-  computed: {
-    dataCate: function () {
-      return this.DATA_CATE
-    },
-    dataPos: function () {
-      return this.DATA_POS
     }
   },
 
   methods: {
     addData() {
-      this.errors = []
-      if (this.blog.title == '') {
-        this.errors.push('title không được trống')
-      }
-      if (this.blog.des == '') {
-        this.errors.push('des không được trống')
-      }
-      if (this.blog.detail == '') {
-        this.errors.push('deatil không được trống')
-      }
-      if (this.blog.category == '') {
-        this.errors.push('category không được trống')
-      }
-      if (this.blog.public == '') {
-        this.errors.push('public không được trống')
-      }
-      if (this.blog.data_pubblic == '') {
-        this.errors.push('data_pubblic không được trống')
-      }
-      if (this.blog.position == []) {
-        this.errors.push('position không được trống!')
-      }
-      if (this.errors.length > 0) {
-        return false
-      }
-      else {
+      this.errors = [];
+      Object.entries(this.blog).forEach(([key, value]) => {
+        console.log(key, value)
+        if (!value) {
+          this.errors.push(key + ' Rỗng')
+        }
+      })
+      if (!this.errors.length) {
         this.blog.position = JSON.stringify(this.blog.position)
-        axios.post('http://127.0.0.1:8000/api/blogs', this.blog).then(function (response) { });
-        this.$router.push({ path: '/blogs' })
+        axios.post('http://127.0.0.1:8000/api/blogs', this.blog).then(function (response) { }.bind(this)).then(
+          () => {
+            this.$router.push({ path: '/blogs' })
+          }
+        );
       }
     },
 

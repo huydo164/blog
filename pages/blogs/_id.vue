@@ -17,9 +17,7 @@
 </template>
 
 <script>
-import AppMenu from '@/components/AppMenu'
 import BlogCreateEdit from '@/components/BlogCreateEdit'
-import axios from 'axios'
 export default {
   components: { BlogCreateEdit }
 }

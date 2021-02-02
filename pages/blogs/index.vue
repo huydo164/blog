@@ -36,7 +36,6 @@ export default {
       const url = 'http://127.0.0.1:8000/api/blogs'
       axios.get(url).then((response) => {
         this.blogs = response.data
-        console.log(this.blogs)
       })
     }
   },

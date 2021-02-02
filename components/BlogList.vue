@@ -21,25 +21,14 @@
         >
           <td>{{blog.id}}</td>
           <td>{{blog.title}}</td>
-          <td>
-            <div
-              v-for="(cate, key) in dataCate"
-              :key="key"
-            >
-              <p v-if="key == blog.category">{{cate}}</p>
-
-            </div>
-          </td>
+          <td>{{findCategory(blog.category)}}</td>
           <td v-if="blog.public == 1 ">Yes</td>
           <td v-if="blog.public == 2 ">No</td>
           <td>
             <p>{{parseJSONIfJSON(blog.position)}}</p>
           </td>
           <td>{{blog.data_pubblic}}</td>
-          <td><a
-              v-bind:href=" '/blogs/' +blog.id"
-              title=""
-            >Edit</a></td>
+          <td><a v-bind:href=" '/blogs/' +blog.id">Edit</a></td>
           <td><button
               type="button"
               class="btn btn-danger"
@@ -53,25 +42,20 @@
 
 <script>
 import axios from "axios"
-import { DATA_CATE } from '@/constants/constants.js'
-import { DATA_POS } from '@/constants/constants.js'
+import { CATEGORY_LIST } from '@/mockdata/mock'
+import { POSITION_LIST } from '@/mockdata/mock'
 export default {
   props: ['blogs'],
 
   data() {
     return {
-      DATA_CATE: DATA_CATE,
-      DATA_POS: DATA_POS,
+      CATEGORY_LIST,
+      POSITION_LIST,
     }
   },
-  computed: {
-    dataCate: function () {
-      return this.DATA_CATE
-    },
 
-    dataPos: function () {
-      return this.DATA_POS
-    }
+  computed: {
+
   },
 
   methods: {
@@ -87,6 +71,11 @@ export default {
       } catch (error) {
         return ""
       }
+    },
+
+    findCategory(id) {
+      const category = CATEGORY_LIST.find(element => element === id)
+      return category ? category : ''
     }
   }
 }
